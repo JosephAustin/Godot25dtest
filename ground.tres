@@ -1,0 +1,14 @@
+[gd_resource type="SpatialMaterial" load_steps=3 format=2]
+
+[sub_resource type="Gradient" id=1]
+colors = PoolColorArray( 0.513726, 0.513726, 0.513726, 1, 1, 1, 1, 1 )
+
+[sub_resource type="GradientTexture" id=2]
+gradient = SubResource( 1 )
+
+[resource]
+flags_transparent = true
+params_cull_mode = 2
+params_depth_draw_mode = 1
+albedo_color = Color( 0.184314, 0.462745, 0.513726, 0.670588 )
+albedo_texture = SubResource( 2 )

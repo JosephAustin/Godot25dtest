@@ -1,0 +1,161 @@
+[gd_scene load_steps=16 format=2]
+
+[ext_resource path="res://ground.tres" type="Material" id=2]
+[ext_resource path="res://chest.tres" type="Material" id=3]
+[ext_resource path="res://chest.png" type="Texture" id=4]
+[ext_resource path="res://bg.jpg" type="Texture" id=5]
+[ext_resource path="res://scripts/Hero.gd" type="Script" id=6]
+[ext_resource path="res://scripts/Camera.gd" type="Script" id=7]
+[ext_resource path="res://scripts/CameraController.gd" type="Script" id=8]
+[ext_resource path="res://scripts/Area.gd" type="Script" id=9]
+[ext_resource path="res://bg2.png" type="Texture" id=10]
+
+[sub_resource type="Environment" id=1]
+ambient_light_color = Color( 1, 1, 1, 1 )
+ambient_light_sky_contribution = 0.0
+
+[sub_resource type="BoxShape" id=2]
+
+[sub_resource type="BoxShape" id=3]
+extents = Vector3( 1.01081, 0.560381, 0.942879 )
+
+[sub_resource type="PlaneMesh" id=4]
+
+[sub_resource type="BoxShape" id=5]
+
+[sub_resource type="PrismMesh" id=6]
+
+[node name="Spatial" type="Spatial"]
+transform = Transform( 1, 3.02662e-05, -2.61438e-05, -3.02662e-05, 1, -3.37937e-05, 2.61438e-05, 3.37937e-05, 1, 0, 2.34189, 0 )
+
+[node name="Environment" type="WorldEnvironment" parent="."]
+environment = SubResource( 1 )
+
+[node name="CameraSet" type="Spatial" parent="."]
+transform = Transform( 1, -5.67602e-13, 0, -5.12312e-13, 1, 1.09139e-11, 0, 0, 1, 0, 0, 0 )
+script = ExtResource( 8 )
+
+[node name="Camera" type="Camera" parent="CameraSet"]
+transform = Transform( 1, -2.18331e-07, -4.98716e-07, 3.57716e-07, 0.953417, 0.301655, 4.08605e-07, -0.301655, 0.953417, -0.132937, 3.11284, 19.3249 )
+cull_mask = 3
+projection = 2
+near = 7.59
+far = 500.0
+script = ExtResource( 7 )
+followTarget = NodePath("../../Actors/Hero")
+minPan = Vector2( -2, 0.1 )
+maxPan = Vector2( 2, 1 )
+
+[node name="Sprite3D" type="Sprite3D" parent="CameraSet/Camera"]
+transform = Transform( 2.26349, 4.36557e-11, -6.91216e-11, 7.45786e-11, 2.66488, -4.17233e-07, -5.09317e-11, 1.78814e-07, 1.85855, -0.00160636, 9.70067, -76.8375 )
+layers = 2
+transparent = false
+double_sided = false
+texture = ExtResource( 5 )
+
+[node name="Camera2" type="Camera" parent="CameraSet"]
+transform = Transform( 0.201497, 0.127099, 0.971208, 7.60141e-05, 0.991543, -0.129776, -0.979489, 0.0262233, 0.199783, 22.6783, 1.58374, 2.2235 )
+visible = false
+cull_mask = 3
+projection = 2
+size = 0.1
+near = 0.1
+script = ExtResource( 7 )
+followTarget = NodePath("../../Actors/Hero")
+
+[node name="Sprite3D" type="Sprite3D" parent="CameraSet/Camera2"]
+transform = Transform( 17.9242, 8.9407e-08, 0, -8.9407e-08, 7.84894, 1.39698e-08, -7.15256e-07, -5.99772e-07, 2.09182, 2.52553, 0.544185, -69.4854 )
+layers = 2
+texture = ExtResource( 10 )
+
+[node name="Area" type="Area" parent="CameraSet"]
+transform = Transform( 14.81, 0.00041798, -0.00029502, 0.000417968, 1, 8.5342e-05, -0.000295032, 8.534e-05, 3.52565, -0.0143068, -2.29877, -6.70315 )
+collision_layer = 3
+collision_mask = 3
+script = ExtResource( 9 )
+target = NodePath("../../CameraSet/Camera2")
+player = NodePath("../../Actors/Hero")
+
+[node name="CollisionShape" type="CollisionShape" parent="CameraSet/Area"]
+transform = Transform( 1, 3.0731e-12, 0, -5.29743e-13, 1, 0, 0, 0, 1, 0, 0, 0 )
+shape = SubResource( 2 )
+
+[node name="Area2" type="Area" parent="CameraSet"]
+transform = Transform( 14.6364, 0.000412726, -0.00027648, 0.000412714, 1, 0.000103441, -0.000276491, 0.000103438, 4.0612, -0.00115836, -2.29842, 3.55404 )
+collision_layer = 3
+collision_mask = 3
+script = ExtResource( 9 )
+target = NodePath("../Camera")
+player = NodePath("../../Actors/Hero")
+
+[node name="CollisionShape" type="CollisionShape" parent="CameraSet/Area2"]
+transform = Transform( 1, -5.68601e-13, 0, 1.29374e-12, 1, 3.63798e-12, -1.81899e-12, 0, 1, 0, 0, 0 )
+shape = SubResource( 2 )
+
+[node name="GroundObjects" type="Node" parent="."]
+
+[node name="GroundObject" type="StaticBody" parent="GroundObjects"]
+transform = Transform( 2.23952, 0, 0, 0, 1.10452, 0, 0, 0, 1.0742, 0.00965908, -0.675306, 0.218521 )
+
+[node name="CollisionShape" type="CollisionShape" parent="GroundObjects/GroundObject"]
+transform = Transform( 5.95168, 0, 0, 0, 0.0151622, 0, 0, 0, 4.64484, -0.233188, 0, 0 )
+shape = SubResource( 3 )
+
+[node name="CSGMesh" type="CSGMesh" parent="GroundObjects/GroundObject/CollisionShape"]
+mesh = SubResource( 4 )
+material = ExtResource( 2 )
+
+[node name="GroundObject2" type="StaticBody" parent="GroundObjects"]
+transform = Transform( 0.155335, 0, 0, 0, 0.888804, -0.637737, 0, 0.655738, 0.864405, 0.00965908, -0.675306, -0.539644 )
+
+[node name="CollisionShape" type="CollisionShape" parent="GroundObjects/GroundObject2"]
+transform = Transform( 5.95168, 0, 0, 0, 0.0151622, 0, 0, 0, 4.64484, -0.233188, 0, 0 )
+shape = SubResource( 3 )
+
+[node name="CSGMesh" type="CSGMesh" parent="GroundObjects/GroundObject2/CollisionShape"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, -1.16415e-10, 1, 0, 0, 0 )
+mesh = SubResource( 4 )
+material = ExtResource( 2 )
+__meta__ = {
+"_editor_description_": ""
+}
+
+[node name="Chest" type="StaticBody" parent="GroundObjects"]
+transform = Transform( 0.332287, 0, 0, 0, 0.394106, 0, 0, 0, 0.282991, 1.63793, -0.300488, 1.05979 )
+collision_layer = 3
+
+[node name="CollisionShape" type="CollisionShape" parent="GroundObjects/Chest"]
+shape = SubResource( 3 )
+
+[node name="Sprite3D" type="Sprite3D" parent="GroundObjects/Chest/CollisionShape"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.61017 )
+layers = 3
+material_override = ExtResource( 3 )
+cast_shadow = 0
+pixel_size = 0.0025
+texture = ExtResource( 4 )
+
+[node name="Actors" type="Node" parent="."]
+
+[node name="Hero" type="KinematicBody" parent="Actors"]
+transform = Transform( 0.3, 0, 0, 0, 0.5, 0, 0, 0, 0.3, -0.186774, -0.080869, 4.81086 )
+collision_layer = 2
+collision_mask = 2
+script = ExtResource( 6 )
+
+[node name="CollisionShape" type="CollisionShape" parent="Actors/Hero"]
+transform = Transform( 1, 8.29815e-13, -3.63798e-12, -2.78878e-12, 1, 9.45874e-11, 0, 0, 1, 0, 0.0255281, 0 )
+shape = SubResource( 5 )
+__meta__ = {
+"_editor_description_": ""
+}
+
+[node name="shrimp" type="Spatial" parent="Actors/Hero/CollisionShape"]
+transform = Transform( -0.283587, -1.31359e-14, -1.12144e-07, 1.17592e-13, 0.122297, -1.22386e-11, 7.14045e-08, 0, -0.265953, 0, -0.808277, 0 )
+
+[node name="Cube" type="MeshInstance" parent="Actors/Hero/CollisionShape/shrimp"]
+transform = Transform( 2.74907, 1.66945e-13, 3.62504e-07, 9.62994e-12, 5.15782, -8.60499e-10, 2.07529e-07, 1.26691e-19, 2.34359, 0, 1.53717, 0 )
+layers = 2
+mesh = SubResource( 6 )
+skeleton = NodePath("")
+material/0 = null
